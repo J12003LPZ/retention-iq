@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RetentionIQ - Customer Health</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface-container-high": "#222a3d",
+                        "error-container": "#93000a",
+                        "primary-fixed": "#e1e0ff",
+                        "on-background": "#dae2fd",
+                        "on-primary": "#1000a9",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-surface": "#dae2fd",
+                        "secondary-fixed": "#6ffbbe",
+                        "secondary-fixed-dim": "#4edea3",
+                        "secondary": "#4edea3",
+                        "surface-container-highest": "#2d3449",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "outline": "#908fa0",
+                        "on-surface-variant": "#c7c4d7",
+                        "surface-container-lowest": "#060e20",
+                        "primary": "#c0c1ff",
+                        "tertiary-container": "#ca8100",
+                        "on-error": "#690005",
+                        "surface-tint": "#c0c1ff",
+                        "on-secondary": "#003824",
+                        "inverse-primary": "#494bd6",
+                        "on-tertiary": "#472a00",
+                        "surface-container": "#171f33",
+                        "on-primary-container": "#0d0096",
+                        "surface-container-low": "#131b2e",
+                        "inverse-surface": "#dae2fd",
+                        "inverse-on-surface": "#283044",
+                        "surface-variant": "#2d3449",
+                        "on-secondary-fixed": "#002113",
+                        "surface-dim": "#0b1326",
+                        "tertiary-fixed": "#ffddb8",
+                        "on-secondary-fixed-variant": "#005236",
+                        "surface": "#0b1326",
+                        "tertiary": "#ffb95f",
+                        "on-tertiary-container": "#3e2400",
+                        "surface-bright": "#31394d",
+                        "primary-container": "#8083ff",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-secondary-container": "#00311f",
+                        "on-error-container": "#ffdad6",
+                        "secondary-container": "#00a572",
+                        "background": "#0b1326",
+                        "outline-variant": "#464554",
+                        "on-primary-fixed": "#07006c",
+                        "error": "#ffb4ab"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "gutter": "24px",
+                        "xs": "4px",
+                        "2xl": "48px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "md": "16px",
+                        "margin-desktop": "40px",
+                        "xl": "32px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "mono-sm": ["JetBrains Mono"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "title-md": ["Inter"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "mono-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "title-md": ["18px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom Scrollbar for sleekness */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #464554; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #908fa0; }
+        
+        .deep-shadow { box-shadow: 0 12px 24px -12px rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md h-screen overflow-hidden flex">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-low dark:bg-surface-container-low fixed left-0 top-0 h-screen w-[260px] border-r border-outline-variant flex flex-col h-full py-lg px-md z-40">
+<!-- Header -->
+<div class="flex items-center gap-md mb-xl px-sm">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined font-bold text-[20px]">insights</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-bold text-primary tracking-tight leading-none">RetentionIQ</span>
+<span class="font-label-md text-label-md text-on-surface-variant mt-xs">Executive Suite</span>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<ul class="flex flex-col gap-xs flex-1">
+<!-- Overview -->
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+</li>
+<!-- Customer Health (Active) -->
+<li>
+<a class="flex items-center gap-md px-md py-sm bg-primary-container text-on-primary-container font-bold rounded-lg scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">monitor_heart</span>
+<span class="font-label-md text-label-md">Customer Health</span>
+</a>
+</li>
+<!-- Revenue Risk -->
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+<span class="font-label-md text-label-md">Revenue Risk</span>
+</a>
+</li>
+<!-- Cohort Analysis -->
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">groups</span>
+<span class="font-label-md text-label-md">Cohort Analysis</span>
+</a>
+</li>
+<!-- Predictions -->
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+<span class="font-label-md text-label-md">Predictions</span>
+</a>
+</li>
+<!-- Recommendations -->
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+<span class="font-label-md text-label-md">Recommendations</span>
+</a>
+</li>
+</ul>
+<!-- Bottom Actions -->
+<ul class="flex flex-col gap-xs mt-auto pt-lg border-t border-outline-variant">
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 ml-[260px] flex flex-col h-screen relative bg-background">
+<!-- TopNavBar -->
+<header class="bg-surface/80 dark:bg-surface/80 backdrop-blur-xl sticky top-0 z-30 w-full border-b border-outline-variant shadow-sm flex justify-between items-center h-16 px-gutter">
+<!-- Left: Search -->
+<div class="flex-1 max-w-md relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg py-xs pl-[36px] pr-sm text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-primary transition-colors" placeholder="Search customers, domains, or tags..." type="text"/>
+</div>
+<!-- Center: Context Links -->
+<div class="flex items-center gap-lg ml-xl">
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md uppercase tracking-widest opacity-80 transition-opacity" href="#">Date Range</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md uppercase tracking-widest opacity-80 transition-opacity" href="#">Project Alpha</a>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center gap-md ml-auto">
+<button class="p-xs text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest rounded-full transition-colors opacity-80 hover:opacity-100">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest rounded-full transition-colors opacity-80 hover:opacity-100">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-bright border border-outline-variant ml-sm overflow-hidden cursor-pointer" data-alt="A minimalist, highly professional user profile avatar showing a stylized silhouette or abstract geometric pattern. Dark mode aesthetic with subtle lighting, deep indigo background, pristine smooth finish. High-end corporate software vibe.">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaMaM43YCejAyOuTmX5mVrLjIYWL3ps2CnIOOjLJKNGrh49CVn1-z8Q6PlJdi1IgYvxhnL2vnA3vF9O-PbnG4_y4RDPyWDTsNbVtZWtxuWHLUS59GMHW0Beka802vaxZk7qGDB_zFkrinOr-thbRLI5SI1fMYz4ZiFkBjxjtq4WoLzZ-1NiNqQmpHyNKEbTnnOdshIPdFxYNHGVbfxo0NdDgIJmmFV6iEWw5PX_BwlXJzx-cbj3z6hWG6XI4ogINI1U6sEMYPE9u18"/>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 overflow-auto p-gutter">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-xl">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-xs">Customer Health Console</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Monitoring 1,248 active accounts. 42 require immediate attention.</p>
+</div>
+<div class="flex gap-md">
+<button class="flex items-center gap-xs px-md py-sm bg-surface-container border border-outline-variant rounded-lg text-on-surface font-label-md text-label-md hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                        Filter Views
+                    </button>
+<button class="flex items-center gap-xs px-md py-sm bg-primary text-on-primary font-label-md text-label-md rounded-lg shadow-[0_0_12px_rgba(99,102,241,0.2)] hover:bg-primary-container hover:text-on-primary-container transition-all">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                        Export CSV
+                    </button>
+</div>
+</div>
+<!-- Data Table Container -->
+<div class="bg-surface-container border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<!-- Sticky Header -->
+<thead class="sticky top-0 bg-surface-container-highest z-10 border-b border-outline-variant">
+<tr>
+<th class="py-sm px-md font-label-md text-label-md text-on-surface-variant uppercase tracking-[0.05em] font-medium whitespace-nowrap">
+<div class="flex items-center gap-xs cursor-pointer group">
+                                        Customer Name
+                                        <span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-100 transition-opacity">arrow_downward</span>
+</div>
+</th>
+<th class="py-sm px-md font-label-md text-label-md text-on-surface-variant uppercase tracking-[0.05em] font-medium whitespace-nowrap">Health Score</th>
+<th class="py-sm px-md font-label-md text-label-md text-on-surface-variant uppercase tracking-[0.05em] font-medium whitespace-nowrap">
+<div class="flex items-center gap-xs cursor-pointer group">
+                                        Churn Prob.
+                                        <span class="material-symbols-outlined text-[16px] text-on-surface">arrow_downward</span>
+</div>
+</th>
+<th class="py-sm px-md font-label-md text-label-md text-on-surface-variant uppercase tracking-[0.05em] font-medium whitespace-nowrap text-right">Monthly Rev</th>
+<th class="py-sm px-md font-label-md text-label-md text-on-surface-variant uppercase tracking-[0.05em] font-medium whitespace-nowrap">Last Login</th>
+<th class="py-sm px-md font-label-md text-label-md text-on-surface-variant uppercase tracking-[0.05em] font-medium whitespace-nowrap text-center">Tickets</th>
+<th class="py-sm px-md font-label-md text-label-md text-on-surface-variant uppercase tracking-[0.05em] font-medium whitespace-nowrap">Recommended Action</th>
+</tr>
+</thead>
+<tbody class="font-mono-sm text-mono-sm text-on-surface divide-y divide-outline-variant/50">
+<!-- Row 1: Selected/Open -->
+<tr class="bg-surface-container-highest/50 hover:bg-surface-container-highest transition-colors cursor-pointer border-l-2 border-l-primary h-[52px]">
+<td class="py-sm px-md">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded bg-surface-bright flex items-center justify-center text-[10px] font-bold text-on-surface border border-outline-variant">NX</div>
+<span class="font-body-md text-body-md font-medium text-on-surface">Nexus Dynamics</span>
+</div>
+</td>
+<td class="py-sm px-md">
+<span class="inline-flex items-center gap-xs px-2 py-1 rounded-full bg-error/10 text-error font-label-md text-label-md border border-error/20">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> Critical
+                                    </span>
+</td>
+<td class="py-sm px-md text-error font-medium">84%</td>
+<td class="py-sm px-md text-right font-medium">$12,450</td>
+<td class="py-sm px-md text-on-surface-variant">3 weeks ago</td>
+<td class="py-sm px-md text-center">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-surface-bright border border-outline-variant text-on-surface">2</span>
+</td>
+<td class="py-sm px-md">
+<button class="text-primary hover:text-primary-container font-label-md text-label-md transition-colors flex items-center gap-xs">
+                                        Schedule Review <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-highest transition-colors cursor-pointer border-l-2 border-l-transparent h-[52px]">
+<td class="py-sm px-md">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded bg-surface-bright flex items-center justify-center text-[10px] font-bold text-on-surface border border-outline-variant">AQ</div>
+<span class="font-body-md text-body-md font-medium text-on-surface">Aura Q3</span>
+</div>
+</td>
+<td class="py-sm px-md">
+<span class="inline-flex items-center gap-xs px-2 py-1 rounded-full bg-tertiary/10 text-tertiary font-label-md text-label-md border border-tertiary/20">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> At Risk
+                                    </span>
+</td>
+<td class="py-sm px-md text-tertiary font-medium">42%</td>
+<td class="py-sm px-md text-right font-medium">$8,200</td>
+<td class="py-sm px-md text-on-surface-variant">2 days ago</td>
+<td class="py-sm px-md text-center">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-surface-bright border border-outline-variant text-on-surface">1</span>
+</td>
+<td class="py-sm px-md">
+<button class="text-primary hover:text-primary-container font-label-md text-label-md transition-colors flex items-center gap-xs">
+                                        Send Nudge <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-highest transition-colors cursor-pointer border-l-2 border-l-transparent h-[52px]">
+<td class="py-sm px-md">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded bg-surface-bright flex items-center justify-center text-[10px] font-bold text-on-surface border border-outline-variant">VO</div>
+<span class="font-body-md text-body-md font-medium text-on-surface">Vanguard Ops</span>
+</div>
+</td>
+<td class="py-sm px-md">
+<span class="inline-flex items-center gap-xs px-2 py-1 rounded-full bg-secondary/10 text-secondary font-label-md text-label-md border border-secondary/20">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Healthy
+                                    </span>
+</td>
+<td class="py-sm px-md text-on-surface-variant">12%</td>
+<td class="py-sm px-md text-right font-medium">$24,000</td>
+<td class="py-sm px-md text-on-surface-variant">Today</td>
+<td class="py-sm px-md text-center">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-surface-bright border border-outline-variant text-on-surface-variant">0</span>
+</td>
+<td class="py-sm px-md">
+<span class="text-on-surface-variant font-label-md text-label-md italic">No action needed</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</div>
+<!-- Profile Drawer Overlay (Open State) -->
+<div class="fixed inset-0 bg-background/60 backdrop-blur-sm z-50 flex justify-end">
+<!-- Drawer Panel -->
+<aside class="w-[480px] h-full bg-surface-container border-l border-outline-variant deep-shadow flex flex-col transform transition-transform duration-300 translate-x-0">
+<!-- Drawer Header -->
+<div class="p-lg border-b border-outline-variant flex justify-between items-start bg-surface-container-low">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-xl bg-surface-bright border border-outline-variant flex items-center justify-center text-on-surface font-title-md text-title-md">
+                        NX
+                    </div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface leading-tight">Nexus Dynamics</h2>
+<div class="flex items-center gap-sm mt-xs">
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">ID: CUS-8829</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-label-md text-label-md text-primary">Enterprise Plan</span>
+</div>
+</div>
+</div>
+<button class="p-xs text-on-surface-variant hover:text-on-surface rounded-full hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Drawer Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-lg space-y-xl">
+<!-- AI Summary Card -->
+<div class="bg-surface border-t border-primary rounded-xl p-md border-x border-b border-outline-variant relative overflow-hidden">
+<div class="absolute top-0 right-0 p-sm opacity-20 pointer-events-none">
+<span class="material-symbols-outlined text-[64px] text-primary">auto_awesome</span>
+</div>
+<div class="flex items-center gap-xs mb-sm">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<h3 class="font-label-md text-label-md uppercase tracking-widest text-primary">AI Insights</h3>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface leading-relaxed">
+                        Customer usage declined <span class="text-error font-medium">42%</span> in the last 3 weeks following <span class="text-tertiary font-medium">2 unresolved</span> support issues regarding API rate limits. High risk of churn before next renewal cycle.
+                    </p>
+</div>
+<!-- Risk Indicators Bento -->
+<div>
+<h3 class="font-title-md text-title-md text-on-surface mb-md">Risk Indicators</h3>
+<div class="grid grid-cols-2 gap-sm">
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-md">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase block mb-xs">Engagement Score</span>
+<div class="flex items-end gap-sm">
+<span class="font-display-lg text-display-lg text-error leading-none">24</span>
+<span class="font-mono-sm text-mono-sm text-error flex items-center mb-1">
+<span class="material-symbols-outlined text-[14px]">trending_down</span> -12%
+                                </span>
+</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-md">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase block mb-xs">Active Users</span>
+<div class="flex items-end gap-sm">
+<span class="font-display-lg text-display-lg text-tertiary leading-none">4</span>
+<span class="font-mono-sm text-mono-sm text-tertiary flex items-center mb-1">
+<span class="material-symbols-outlined text-[14px]">arrow_downward</span> from 15
+                                </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Revenue Timeline -->
+<div>
+<h3 class="font-title-md text-title-md text-on-surface mb-md">Revenue &amp; Activity Timeline</h3>
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-md h-[200px] flex items-end gap-xs relative">
+<!-- Y-axis labels mock -->
+<div class="absolute left-md top-md bottom-md flex flex-col justify-between font-mono-sm text-mono-sm text-outline-variant text-right w-8">
+<span>15k</span>
+<span>10k</span>
+<span>5k</span>
+<span>0</span>
+</div>
+<!-- Chart area -->
+<div class="ml-12 flex-1 h-full flex items-end gap-xs border-l border-b border-outline-variant/50 pb-sm pt-sm relative">
+<!-- Trend line mock -->
+<div class="absolute top-1/2 left-0 w-full border-t border-dashed border-tertiary/40"></div>
+<!-- Bars -->
+<div class="w-full bg-primary/20 rounded-t-sm h-[80%] hover:bg-primary/40 transition-colors relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-surface border border-outline-variant px-2 py-1 rounded font-mono-sm text-[10px] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">$12.4k</div>
+</div>
+<div class="w-full bg-primary/20 rounded-t-sm h-[85%] hover:bg-primary/40 transition-colors"></div>
+<div class="w-full bg-primary/20 rounded-t-sm h-[82%] hover:bg-primary/40 transition-colors"></div>
+<div class="w-full bg-tertiary/40 rounded-t-sm h-[60%] hover:bg-tertiary/60 transition-colors"></div>
+<div class="w-full bg-error/40 rounded-t-sm h-[45%] hover:bg-error/60 transition-colors border-t border-error"></div>
+</div>
+</div>
+<div class="flex justify-between ml-12 mt-xs font-mono-sm text-[10px] text-on-surface-variant">
+<span>Jan</span>
+<span>Feb</span>
+<span>Mar</span>
+<span>Apr</span>
+<span>May</span>
+</div>
+</div>
+</div>
+<!-- Drawer Footer Actions -->
+<div class="p-lg border-t border-outline-variant bg-surface-container-low flex gap-md">
+<button class="flex-1 py-sm px-md border border-outline-variant text-on-surface rounded-lg font-label-md text-label-md hover:bg-surface-bright transition-colors">
+                    Log Activity
+                </button>
+<button class="flex-1 py-sm px-md bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-[0_0_12px_rgba(99,102,241,0.2)]">
+                    Create Playbook
+                </button>
+</div>
+</aside>
+</div>
+</body></html>

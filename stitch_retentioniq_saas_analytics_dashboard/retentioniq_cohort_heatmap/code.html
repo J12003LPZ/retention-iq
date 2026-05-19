@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RetentionIQ - Cohort Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface-container-high": "#222a3d",
+                        "error-container": "#93000a",
+                        "primary-fixed": "#e1e0ff",
+                        "on-background": "#dae2fd",
+                        "on-primary": "#1000a9",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-surface": "#dae2fd",
+                        "secondary-fixed": "#6ffbbe",
+                        "secondary-fixed-dim": "#4edea3",
+                        "secondary": "#4edea3",
+                        "surface-container-highest": "#2d3449",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "outline": "#908fa0",
+                        "on-surface-variant": "#c7c4d7",
+                        "surface-container-lowest": "#060e20",
+                        "primary": "#c0c1ff",
+                        "tertiary-container": "#ca8100",
+                        "on-error": "#690005",
+                        "surface-tint": "#c0c1ff",
+                        "on-secondary": "#003824",
+                        "inverse-primary": "#494bd6",
+                        "on-tertiary": "#472a00",
+                        "surface-container": "#171f33",
+                        "on-primary-container": "#0d0096",
+                        "surface-container-low": "#131b2e",
+                        "inverse-surface": "#dae2fd",
+                        "inverse-on-surface": "#283044",
+                        "surface-variant": "#2d3449",
+                        "on-secondary-fixed": "#002113",
+                        "surface-dim": "#0b1326",
+                        "tertiary-fixed": "#ffddb8",
+                        "on-secondary-fixed-variant": "#005236",
+                        "surface": "#0b1326",
+                        "tertiary": "#ffb95f",
+                        "on-tertiary-container": "#3e2400",
+                        "surface-bright": "#31394d",
+                        "primary-container": "#8083ff",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-secondary-container": "#00311f",
+                        "on-error-container": "#ffdad6",
+                        "secondary-container": "#00a572",
+                        "background": "#0b1326",
+                        "outline-variant": "#464554",
+                        "on-primary-fixed": "#07006c",
+                        "error": "#ffb4ab"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "sm": "8px",
+                        "gutter": "24px",
+                        "xs": "4px",
+                        "2xl": "48px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "md": "16px",
+                        "margin-desktop": "40px",
+                        "xl": "32px",
+                        "lg": "24px"
+                    },
+                    fontFamily: {
+                        "mono-sm": ["JetBrains Mono"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "title-md": ["Inter"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Inter"]
+                    },
+                    fontSize: {
+                        "mono-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "title-md": ["18px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Custom Heatmap Tiers based on Theme Colors to avoid arbitrary values */
+        .heat-tier-5 { background-color: #8083ff; color: #0d0096; font-weight: 600; } /* primary-container */
+        .heat-tier-4 { background-color: rgba(128, 131, 255, 0.7); color: #dae2fd; } 
+        .heat-tier-3 { background-color: rgba(128, 131, 255, 0.4); color: #c7c4d7; }
+        .heat-tier-2 { background-color: rgba(128, 131, 255, 0.2); color: #908fa0; }
+        .heat-tier-1 { background-color: transparent; color: #908fa0; }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased flex overflow-hidden h-screen">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-low border-r border-outline-variant fixed left-0 top-0 h-screen w-[260px] flex flex-col py-lg px-md z-40">
+<div class="mb-xl px-sm flex items-center gap-sm">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary" data-icon="analytics" data-weight="fill">analytics</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">RetentionIQ</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">Executive Suite</p>
+</div>
+</div>
+<ul class="flex flex-col gap-xs flex-1">
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="monitor_heart">monitor_heart</span>
+<span class="font-label-md text-label-md">Customer Health</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="payments">payments</span>
+<span class="font-label-md text-label-md">Revenue Risk</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm bg-primary-container text-on-primary-container font-bold rounded-lg scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="groups" data-weight="fill">groups</span>
+<span class="font-label-md text-label-md">Cohort Analysis</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="analytics">analytics</span>
+<span class="font-label-md text-label-md">Predictions</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-md text-label-md">Recommendations</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto border-t border-outline-variant pt-md">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col ml-[260px] w-[calc(100%-260px)] h-screen overflow-y-auto bg-background">
+<!-- TopNavBar -->
+<header class="bg-surface/80 backdrop-blur-xl sticky top-0 z-50 w-full border-b border-outline-variant shadow-sm flex justify-between items-center h-16 px-gutter transition-opacity hover:opacity-100">
+<div class="flex items-center gap-lg">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-on-surface-variant" data-icon="search">search</span>
+<input class="bg-surface-container text-on-surface font-body-md text-body-md rounded-full pl-10 pr-4 py-1.5 border border-outline-variant focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-64 transition-colors" placeholder="Search data..." type="text"/>
+</div>
+<nav class="hidden lg:flex gap-md">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" href="#">Date Range</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" href="#">Project Alpha</a>
+</nav>
+</div>
+<div class="flex items-center gap-sm">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors mr-sm">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden cursor-pointer">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="A professional headshot of a person looking forward confidently, set against a dark grey background to match a modern, premium UI aesthetic. The lighting is soft and corporate." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAhnHjC126gwqnAnB8BtVkpqOZdnj33w0HXex8Yyjjg_rI3GLpPTnjnXBigOihaDz7X4tRn-ahNSbKuFsUYqyU7SxaeA1oLfEXv_XMCnr5eONByuxLxzTHDbsSeTVNXzG6hCtucO9_lyqAo3RD6UNs7NC8enuiDL7Kkz64N0i4_Ov9iZvx1xEK7lE3bUDUGiSp_U_HPan1wEdWHxprUSfXxBUz0ZJh1QGK5WHiG5leJeqnUqOFbo-3orMxptcwdDAv4A9u9FNpmYX6"/>
+</div>
+</div>
+</header>
+<!-- Canvas / Dashboard Content -->
+<main class="flex-1 p-gutter max-w-[1440px] w-full mx-auto flex flex-col gap-gutter">
+<!-- Page Header & Filters -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Cohort Retention Analysis</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Tracking user survival rate across monthly sign-up vintages.</p>
+</div>
+<div class="flex flex-wrap items-center gap-sm bg-surface-container p-1 rounded-lg border border-outline-variant">
+<div class="flex items-center gap-2 border-r border-outline-variant pr-sm">
+<span class="font-label-md text-label-md text-on-surface-variant pl-2">Basis:</span>
+<div class="flex bg-surface rounded-md p-0.5">
+<button class="px-3 py-1 rounded bg-primary-container text-on-primary-container font-label-md text-label-md shadow-sm">Users</button>
+<button class="px-3 py-1 rounded text-on-surface-variant hover:text-on-surface font-label-md text-label-md">Revenue</button>
+</div>
+</div>
+<div class="flex items-center gap-2 pl-xs">
+<span class="font-label-md text-label-md text-on-surface-variant">Cohort:</span>
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-md bg-surface text-on-surface border border-outline-variant hover:bg-surface-container-high font-body-md text-body-md transition-colors">
+                            Monthly
+                            <span class="material-symbols-outlined text-sm" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Heatmap Card -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl shadow-[0_12px_24px_-12px_rgba(0,0,0,0.15)] overflow-hidden flex flex-col border-t-2 border-t-primary">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-title-md text-title-md text-on-surface">Retention by Month</h3>
+<button class="flex items-center gap-2 text-primary hover:text-primary-fixed transition-colors font-label-md text-label-md">
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+                        Export CSV
+                    </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full border-collapse text-left min-w-[1000px]">
+<thead>
+<tr class="bg-surface-container border-b border-outline-variant">
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-[0.05em] sticky left-0 z-10 bg-surface-container border-r border-outline-variant w-40">Cohort</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-[0.05em] w-24 text-right border-r border-outline-variant">Size</th>
+<!-- Months M0 to M12 -->
+<th class="py-3 px-2 font-label-md text-label-md text-on-surface-variant uppercase text-center w-12">M0</th>
+<th class="py-3 px-2 font-label-md text-label-md text-on-surface-variant uppercase text-center w-12">M1</th>
+<th class="py-3 px-2 font-label-md text-label-md text-on-surface-variant uppercase text-center w-12">M2</th>
+<th class="py-3 px-2 font-label-md text-label-md text-on-surface-variant uppercase text-center w-12">M3</th>
+<th class="py-3 px-2 font-label-md text-label-md text-on-surface-variant uppercase text-center w-12">M4</th>
+<th class="py-3 px-2 font-label-md text-label-md text-on-surface-variant uppercase text-center w-12">M5</th>
+<th class="py-3 px-2 font-label-md text-label-md text-on-surface-variant uppercase text-center w-12">M6</th>
+<th class="py-3 px-2 font-label-md text-label-md text-on-surface-variant uppercase text-center w-12">M7</th>
+<th class="py-3 px-2 font-label-md text-label-md text-on-surface-variant uppercase text-center w-12">M8</th>
+<th class="py-3 px-2 font-label-md text-label-md text-on-surface-variant uppercase text-center w-12">M9</th>
+<th class="py-3 px-2 font-label-md text-label-md text-on-surface-variant uppercase text-center w-12">M10</th>
+<th class="py-3 px-2 font-label-md text-label-md text-on-surface-variant uppercase text-center w-12">M11</th>
+<th class="py-3 px-2 font-label-md text-label-md text-on-surface-variant uppercase text-center w-12">M12</th>
+</tr>
+</thead>
+<tbody class="font-mono-sm text-mono-sm">
+<!-- Example Row: Jan -->
+<tr class="h-[52px] border-b border-surface-container hover:bg-surface-container-highest transition-colors group">
+<td class="py-2 px-4 font-body-md text-body-md text-on-surface sticky left-0 z-10 bg-surface-container-low group-hover:bg-surface-container-highest border-r border-outline-variant transition-colors">Jan 2023</td>
+<td class="py-2 px-4 text-on-surface-variant text-right border-r border-outline-variant">4,205</td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-5">100%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-4">68%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-4">55%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-3">42%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-3">38%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-3">35%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-2">29%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-2">27%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-2">25%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-2">24%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-1">22%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-1">21%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-1">19%</div></td>
+</tr>
+<!-- Example Row: Feb -->
+<tr class="h-[52px] border-b border-surface-container hover:bg-surface-container-highest transition-colors group">
+<td class="py-2 px-4 font-body-md text-body-md text-on-surface sticky left-0 z-10 bg-surface-container-low group-hover:bg-surface-container-highest border-r border-outline-variant transition-colors">Feb 2023</td>
+<td class="py-2 px-4 text-on-surface-variant text-right border-r border-outline-variant">3,890</td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-5">100%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-4">71%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-4">60%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-3">48%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-3">42%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-3">39%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-2">32%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-2">29%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-2">27%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-2">25%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-1">24%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-1">22%</div></td>
+<td class="py-2 px-1 text-center"><div class="w-full h-8 flex items-center justify-center rounded-sm heat-tier-1">-</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</div>
+</body></html>
