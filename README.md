@@ -61,7 +61,7 @@ RetentionIQ is a full-stack SaaS churn analytics dashboard that combines a sciki
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/<your-username>/retention_iq.git
+git clone https://github.com/J12003LPZ/retention-iq.git
 cd retention_iq
 npm install
 ```
