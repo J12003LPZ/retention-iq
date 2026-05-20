@@ -39,11 +39,13 @@ export function fmtNum(value: number): string {
  * @example fmtDate("2024-01-15T...") → "Jan 15, 2024"
  */
 export function fmtDate(iso: string): string {
-  const date = new Date(iso)
+  // Parse as UTC to avoid off-by-one on date-only strings (no time component)
+  const date = new Date(iso.includes("T") ? iso : iso + "T00:00:00Z")
   return date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
+    timeZone: "UTC",
   })
 }
 

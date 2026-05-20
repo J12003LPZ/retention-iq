@@ -31,7 +31,6 @@ export function HealthGauge({
   size = 160,
 }: HealthGaugeProps) {
   const clampedScore = Math.max(0, Math.min(100, score))
-  const color = zoneColor(clampedScore)
 
   // Geometry
   const strokeWidth = size * 0.1
@@ -61,6 +60,8 @@ export function HealthGauge({
     const raf = requestAnimationFrame(step)
     return () => cancelAnimationFrame(raf)
   }, [clampedScore])
+
+  const color = zoneColor(animatedScore)
 
   // strokeDashoffset: 0 = full arc, halfCircumference = empty arc
   const fillRatio = animatedScore / 100
