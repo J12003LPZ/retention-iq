@@ -3,6 +3,9 @@ import type { ChurnTrendPoint, ChurnDriver } from "@/lib/types";
 
 export async function getChurnTrend(granularity: "daily" | "weekly" | "monthly") {
   const bucket = granularity === "daily" ? "day" : granularity === "weekly" ? "week" : "month";
+  if (!["day", "week", "month"].includes(bucket)) {
+    throw new Error(`Invalid granularity: ${granularity}`);
+  }
   const rows = await sql`
     with buckets as (
       select generate_series(

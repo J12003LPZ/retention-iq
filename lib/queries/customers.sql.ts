@@ -21,7 +21,7 @@ export async function getCustomers(opts: ListOpts = {}) {
     mrr: "mrr_cents",
     lastLogin: "last_login",
   } as const;
-  const sortCol = sortMap[opts.sort ?? "churnProb"];
+  const sortCol = sortMap[opts.sort ?? "churnProb"] ?? "churn_prob";
   const dir     = opts.dir === "asc" ? "asc" : "desc";
 
   const rows = await sql`

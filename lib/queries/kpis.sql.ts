@@ -65,12 +65,13 @@ export async function getKpiSummary(rangeDays = 30): Promise<KpiSummary> {
       coalesce((select json_agg(json_build_object('date', date, 'churnPct', round(churn_pct::numeric, 2))) from sparkline), '[]') as trend
   `;
   const r = rows[0];
+  if (!r) throw new Error("getKpiSummary: no rows returned");
   return {
     churnRatePct: Number(r.churn_rate_pct),
     churnRateDeltaPct: Number(r.churn_rate_delta_pct),
     revenueAtRiskCents: Number(r.revenue_at_risk_cents),
     predictedChurnUsers: Number(r.predicted_churn_users),
     healthScore: Number(r.health_score),
-    trend: r.trend as KpiSummary["trend"] ?? [],
+    trend: (r.trend as KpiSummary["trend"]) ?? [],
   };
 }

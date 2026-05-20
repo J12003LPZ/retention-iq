@@ -27,8 +27,8 @@ export async function getRevenueRiskBands(): Promise<RevenueRiskBand[]> {
   return rows.map((r) => ({ band: r.band as RevenueRiskBand["band"], customers: r.customers, mrrCents: Number(r.mrr_cents) }));
 }
 
-export async function getRevenueSankey() {
-  return sql`
+export async function getRevenueSankey(): Promise<{ bucket: string; users: number; mrrCents: number }[]> {
+  const rows = await sql`
     with snap as (
       select c.id,
              case
@@ -46,5 +46,6 @@ export async function getRevenueSankey() {
     )
     select bucket, count(*)::int as users, sum(mrr_cents)::bigint as mrr_cents
     from snap group by bucket;
-  `;
+  ` as unknown as { bucket: string; users: number; mrr_cents: number }[];
+  return rows.map((r) => ({ bucket: r.bucket, users: r.users, mrrCents: Number(r.mrr_cents) }));
 }
