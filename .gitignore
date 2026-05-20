@@ -43,3 +43,6 @@ next-env.d.ts
 
 # python virtualenv
 .venv/
+
+# ml model artifact
+public/model/*.joblib
