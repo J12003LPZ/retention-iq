@@ -39,16 +39,23 @@ export default async function SupportPage() {
   const topCategory = rows[0]
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-10 animate-fade-up">
       {/* Page header */}
-      <div>
-        <h1 className="font-display text-3xl font-semibold tracking-tight text-[--color-on-surface]">
-          Support Analytics
+      <header className="flex flex-col gap-3 border-b border-[--color-outline-variant]/40 pb-6">
+        <div className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-[--color-on-surface-variant]">
+          <span className="h-px w-8 bg-[--color-primary]" />
+          <span>Support Telemetry</span>
+        </div>
+        <h1
+          className="font-display text-[3.25rem] font-medium leading-[0.95] tracking-[-0.035em] text-[--color-on-surface]"
+          style={{ fontVariationSettings: "'opsz' 144, 'SOFT' 80, 'WONK' 0" }}
+        >
+          Support <span className="italic text-[--color-primary]">Analytics</span>
         </h1>
-        <p className="mt-1 text-sm text-[--color-on-surface-variant]">
+        <p className="max-w-2xl text-[16px] leading-relaxed text-[--color-on-surface-variant]">
           Ticket volume, satisfaction scores, and resolution times by category
         </p>
-      </div>
+      </header>
 
       {/* KPI row */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -73,9 +80,9 @@ export default async function SupportPage() {
       {topCategory && (
         <Card className="bg-[--color-surface-container] ring-[--color-outline-variant]">
           <CardHeader>
-            <CardTitle className="text-base font-semibold text-[--color-on-surface]">
-              Highest Volume Category
-            </CardTitle>
+            <h2 className="font-display text-[1.5rem] font-medium leading-tight tracking-tight text-[--color-on-surface]">
+              Highest Volume <span className="italic text-[--color-on-surface-variant] font-normal">Category</span>
+            </h2>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-6">
