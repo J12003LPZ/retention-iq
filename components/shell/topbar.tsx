@@ -15,6 +15,7 @@ export function Topbar() {
           <input
             type="text"
             placeholder="Search accounts, insights…"
+            aria-label="Search"
             className="w-72 rounded-full border border-outline-variant bg-surface-container py-1.5 pl-9 pr-4 text-sm text-on-surface placeholder:text-on-surface-variant focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           />
         </div>
@@ -33,11 +34,11 @@ export function Topbar() {
         </div>
       </div>
       <div className="flex items-center gap-3">
-        <button className="relative rounded-full p-2 text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface">
+        <button aria-label="Notifications" className="relative rounded-full p-2 text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface">
           <Bell size={18} />
           <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full border border-surface bg-error" />
         </button>
-        <button className="rounded-full p-2 text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface">
+        <button aria-label="Help" className="rounded-full p-2 text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface">
           <HelpCircle size={18} />
         </button>
         <div className="ml-2 flex h-8 w-8 items-center justify-center rounded-full border border-outline-variant bg-surface-variant text-on-surface-variant">

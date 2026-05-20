@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, HeartPulse, Wallet, Users, LineChart,
-  Sparkles, Database, Settings,
+  Sparkles, Lightbulb, Database, Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -14,7 +14,7 @@ const NAV = [
   { href: "/cohorts",           label: "Cohort Analysis", icon: Users },
   { href: "/support",           label: "Support",         icon: LineChart },
   { href: "/predictions",       label: "Predictions",     icon: Sparkles },
-  { href: "/recommendations",   label: "Recommendations", icon: Sparkles },
+  { href: "/recommendations",   label: "Recommendations", icon: Lightbulb },
   { href: "/sql",               label: "SQL Explorer",    icon: Database },
 ];
 
@@ -51,7 +51,12 @@ export function Sidebar() {
         <div className="mt-auto border-t border-outline-variant pt-4">
           <Link
             href="/settings"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface"
+            className={cn(
+              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
+              pathname === "/settings"
+                ? "bg-primary-container text-on-primary-container"
+                : "text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface",
+            )}
           >
             <Settings size={18} />
             <span>Settings</span>
@@ -60,12 +65,22 @@ export function Sidebar() {
       </nav>
 
       <nav className="fixed bottom-0 left-0 right-0 z-40 flex justify-around border-t border-outline-variant bg-surface-container-low py-2 lg:hidden">
-        {NAV.slice(0, 5).map(({ href, icon: Icon, label }) => (
-          <Link key={href} href={href} className="flex flex-col items-center px-2 py-1 text-[10px] text-on-surface-variant">
-            <Icon size={18} />
-            <span>{label}</span>
-          </Link>
-        ))}
+        {NAV.slice(0, 5).map(({ href, icon: Icon, label }) => {
+          const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={cn(
+                "flex flex-col items-center px-2 py-1 text-[10px] transition-colors",
+                active ? "text-primary" : "text-on-surface-variant",
+              )}
+            >
+              <Icon size={18} />
+              <span>{label}</span>
+            </Link>
+          );
+        })}
       </nav>
     </>
   );
