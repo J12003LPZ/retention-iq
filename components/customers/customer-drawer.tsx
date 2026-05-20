@@ -18,7 +18,7 @@ interface TicketRow {
 interface PaymentRow {
   id: string
   amount_cents: number
-  status: "paid" | "failed" | "pending" | string
+  status: "succeeded" | "failed" | "pending" | "refunded"
   paid_at: string | null
 }
 
@@ -56,10 +56,12 @@ function severityClass(severity: string): string {
 
 function paymentStatusClass(status: string): string {
   switch (status) {
-    case "paid":
+    case "succeeded":
       return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
     case "failed":
       return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+    case "refunded":
+      return "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400"
     default:
       return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
   }
