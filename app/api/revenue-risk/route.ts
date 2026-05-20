@@ -4,6 +4,10 @@ import { getRevenueRiskBands, getRevenueSankey } from "@/lib/queries/revenue.sql
 export const revalidate = 60;
 
 export async function GET() {
-  const [bands, sankey] = await Promise.all([getRevenueRiskBands(), getRevenueSankey()]);
-  return NextResponse.json({ bands, sankey });
+  try {
+    const [bands, sankey] = await Promise.all([getRevenueRiskBands(), getRevenueSankey()]);
+    return NextResponse.json({ bands, sankey });
+  } catch {
+    return NextResponse.json({ error: "internal server error" }, { status: 500 });
+  }
 }

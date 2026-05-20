@@ -4,5 +4,9 @@ import { getCohortRetention } from "@/lib/queries/cohorts.sql";
 export const revalidate = 300;
 
 export async function GET() {
-  return NextResponse.json({ cells: await getCohortRetention(12) });
+  try {
+    return NextResponse.json({ cells: await getCohortRetention(12) });
+  } catch {
+    return NextResponse.json({ error: "internal server error" }, { status: 500 });
+  }
 }

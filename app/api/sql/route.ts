@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { sqlReadonly } from "@/lib/db";
+import { sqlReadonly, isReadonlyConfigured } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
@@ -8,7 +8,7 @@ const MAX_ROWS = 500;
 const TIMEOUT_MS = 5000;
 
 export async function POST(req: Request) {
-  if (!sqlReadonly) {
+  if (!isReadonlyConfigured()) {
     return NextResponse.json({ error: "DATABASE_URL_READONLY not configured" }, { status: 503 });
   }
   const { query } = (await req.json()) as { query?: string };
@@ -25,13 +25,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "query must start with SELECT or WITH" }, { status: 400 });
   }
 
-  const safe = `select * from (${query}) _ limit ${MAX_ROWS}`;
+  // Enforce query timeout at the Postgres level so the in-flight query is
+  // actually cancelled if it exceeds the limit (JS Promise.race alone does not
+  // cancel the running DB query).
+  const safe = `set local statement_timeout = '${TIMEOUT_MS}'; select * from (${query}) _ limit ${MAX_ROWS}`;
   const start = Date.now();
   try {
-    const rows = (await Promise.race([
-      sqlReadonly!.unsafe(safe),
-      new Promise((_, rej) => setTimeout(() => rej(new Error("query timeout")), TIMEOUT_MS)),
-    ])) as unknown as Record<string, unknown>[];
+    const rows = (await sqlReadonly!.unsafe(safe)) as unknown as Record<string, unknown>[];
     return NextResponse.json({
       rows,
       rowCount: rows.length,

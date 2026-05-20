@@ -30,6 +30,10 @@ export const sql: NeonQueryFunction<false, false> = new Proxy(
   }
 );
 
+export function isReadonlyConfigured(): boolean {
+  return !!process.env.DATABASE_URL_READONLY;
+}
+
 export const sqlReadonly: NeonQueryFunction<false, false> | null = new Proxy(
   {} as NeonQueryFunction<false, false>,
   {
