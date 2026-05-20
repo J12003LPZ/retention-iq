@@ -1,0 +1,44 @@
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+
+export default function CohortAnalysisLoading() {
+  return (
+    <div className="flex flex-col gap-6 animate-pulse">
+      {/* Page header skeleton */}
+      <div>
+        <div className="mb-4 h-8 w-64 rounded bg-[--color-surface-container]" />
+        <div className="h-4 w-96 rounded bg-[--color-surface-container]" />
+      </div>
+
+      {/* Controls skeleton */}
+      <div className="flex gap-3">
+        <div className="h-10 w-32 rounded bg-[--color-surface-container]" />
+        <div className="h-10 w-32 rounded bg-[--color-surface-container]" />
+      </div>
+
+      {/* Heatmap skeleton */}
+      <Card className="bg-[--color-surface-container] ring-[--color-outline-variant]">
+        <CardHeader>
+          <div className="h-4 w-40 rounded bg-[--color-surface-container-high]" />
+        </CardHeader>
+        <CardContent className="space-y-2 overflow-x-auto">
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
+            <div key={i} className="flex gap-2">
+              <div className="h-8 w-16 rounded bg-[--color-surface-container-high]" />
+              {[1, 2, 3, 4, 5, 6].map((j) => (
+                <div
+                  key={j}
+                  className="h-8 w-12 rounded bg-[--color-surface-container-high]"
+                />
+              ))}
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
