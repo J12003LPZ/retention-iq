@@ -31,7 +31,7 @@ create table if not exists payments (
   customer_id     uuid not null references customers(id) on delete cascade,
   subscription_id uuid references subscriptions(id) on delete set null,
   amount_cents    int  not null,
-  status          text not null,
+  status          text not null check (status in ('succeeded', 'failed', 'pending', 'refunded')),
   paid_at         timestamptz not null
 );
 
@@ -48,7 +48,7 @@ create table if not exists support_tickets (
   customer_id  uuid not null references customers(id) on delete cascade,
   opened_at    timestamptz not null,
   resolved_at  timestamptz,
-  severity     text not null,
+  severity     text not null check (severity in ('low', 'medium', 'high', 'critical')),
   category     text not null,
-  satisfaction int
+  satisfaction int  check (satisfaction between 1 and 5)
 );

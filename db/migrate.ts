@@ -11,8 +11,7 @@ async function main() {
   for (const f of files) {
     const body = readFileSync(join(dir, f), "utf8");
     console.log(`-> applying ${f}`);
-    const statements = body.split(/;\s*$/m).filter((s) => s.trim());
-    await sql.transaction(statements.map((s) => sql.query(s + ";")));
+    await sql`${sql.unsafe(body)}`;
     console.log(`   ok`);
   }
 }

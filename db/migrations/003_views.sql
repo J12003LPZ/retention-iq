@@ -28,7 +28,9 @@ do $$ begin
   end if;
 end $$;
 
-grant connect on database current_database() to retentioniq_ro;
+do $grant$ begin
+  execute format('grant connect on database %I to retentioniq_ro', current_database());
+end $grant$;
 grant usage on schema public to retentioniq_ro;
 grant select on all tables in schema public to retentioniq_ro;
 alter default privileges in schema public grant select on tables to retentioniq_ro;

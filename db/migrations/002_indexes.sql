@@ -4,3 +4,4 @@ create index if not exists ix_usage_cust_dt    on usage_events(customer_id, even
 create index if not exists ix_tickets_cust     on support_tickets(customer_id);
 create index if not exists ix_customers_signup on customers(signup_date);
 create index if not exists ix_customers_churn  on customers(churned_at);
+create index if not exists ix_subs_plan        on subscriptions(plan_id);

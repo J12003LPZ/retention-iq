@@ -34,7 +34,7 @@ def rand_date(a: date, b: date) -> date:
 
 def main() -> None:
     with psycopg.connect(DB, autocommit=False) as conn, conn.cursor() as cur:
-        cur.execute("truncate support_tickets, usage_events, payments, subscriptions, customers, plans restart identity cascade;")
+        cur.execute("truncate support_tickets, usage_events, payments, subscriptions, customers, plans cascade;")
         cur.executemany(
             "insert into plans(id,name,monthly_cents,tier_rank) values(%s,%s,%s,%s)",
             PLANS,
