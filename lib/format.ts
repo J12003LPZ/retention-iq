@@ -38,9 +38,14 @@ export function fmtNum(value: number): string {
  * Format an ISO date string as a human-readable date.
  * @example fmtDate("2024-01-15T...") → "Jan 15, 2024"
  */
-export function fmtDate(iso: string): string {
-  // Parse as UTC to avoid off-by-one on date-only strings (no time component)
-  const date = new Date(iso.includes("T") ? iso : iso + "T00:00:00Z")
+export function fmtDate(iso: string | Date | null | undefined): string {
+  if (iso == null) return "—"
+  // Accept Date objects (from DB drivers), or ISO strings (with or without time)
+  const date =
+    iso instanceof Date
+      ? iso
+      : new Date(typeof iso === "string" && !iso.includes("T") ? iso + "T00:00:00Z" : iso)
+  if (Number.isNaN(date.getTime())) return "—"
   return date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
