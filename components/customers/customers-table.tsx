@@ -105,6 +105,9 @@ export function CustomersTable({
     [filters.sort, filters.dir, onFiltersChange]
   )
 
+  // Clear debounce timer on unmount
+  useEffect(() => () => { if (debounceRef.current) clearTimeout(debounceRef.current) }, [])
+
   const SortIcon = ({ col }: { col: SortKey }) => {
     if (filters.sort !== col) {
       return <span className="ml-1 text-[--color-on-surface-variant] opacity-40">⇅</span>
@@ -123,6 +126,7 @@ export function CustomersTable({
         {/* Search */}
         <div className="relative flex-1 min-w-[200px] max-w-xs">
           <Input
+            aria-label="Search customers by name or email"
             placeholder="Search name or email…"
             value={searchDraft}
             onChange={handleSearchChange}
@@ -192,34 +196,50 @@ export function CustomersTable({
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-[--color-outline-variant] text-left text-xs font-medium uppercase tracking-wide text-[--color-on-surface-variant]">
-              <th className="px-4 py-3">Company</th>
-              <th className="px-4 py-3">Plan</th>
-              <th className="px-4 py-3">Region</th>
+              <th scope="col" className="px-4 py-3">Company</th>
+              <th scope="col" className="px-4 py-3">Plan</th>
+              <th scope="col" className="px-4 py-3">Region</th>
               <th
+                scope="col"
+                tabIndex={0}
+                aria-sort={filters.sort === "mrr" ? (filters.dir === "asc" ? "ascending" : "descending") : "none"}
                 className="cursor-pointer select-none whitespace-nowrap px-4 py-3 hover:text-[--color-on-surface]"
                 onClick={() => handleSort("mrr")}
+                onKeyDown={(e) => e.key === "Enter" && handleSort("mrr")}
               >
                 MRR <SortIcon col="mrr" />
               </th>
               <th
+                scope="col"
+                tabIndex={0}
+                aria-sort={filters.sort === "churnProb" ? (filters.dir === "asc" ? "ascending" : "descending") : "none"}
                 className="cursor-pointer select-none whitespace-nowrap px-4 py-3 hover:text-[--color-on-surface]"
                 onClick={() => handleSort("churnProb")}
+                onKeyDown={(e) => e.key === "Enter" && handleSort("churnProb")}
               >
                 Churn Risk <SortIcon col="churnProb" />
               </th>
               <th
+                scope="col"
+                tabIndex={0}
+                aria-sort={filters.sort === "health" ? (filters.dir === "asc" ? "ascending" : "descending") : "none"}
                 className="cursor-pointer select-none whitespace-nowrap px-4 py-3 hover:text-[--color-on-surface]"
                 onClick={() => handleSort("health")}
+                onKeyDown={(e) => e.key === "Enter" && handleSort("health")}
               >
                 Health <SortIcon col="health" />
               </th>
               <th
+                scope="col"
+                tabIndex={0}
+                aria-sort={filters.sort === "lastLogin" ? (filters.dir === "asc" ? "ascending" : "descending") : "none"}
                 className="cursor-pointer select-none whitespace-nowrap px-4 py-3 hover:text-[--color-on-surface]"
                 onClick={() => handleSort("lastLogin")}
+                onKeyDown={(e) => e.key === "Enter" && handleSort("lastLogin")}
               >
                 Last Login <SortIcon col="lastLogin" />
               </th>
-              <th className="px-4 py-3">Open Tickets</th>
+              <th scope="col" className="px-4 py-3">Open Tickets</th>
             </tr>
           </thead>
           <tbody>

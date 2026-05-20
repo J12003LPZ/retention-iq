@@ -91,12 +91,12 @@ export function CustomerDrawer({ customerId, onClose }: CustomerDrawerProps) {
       return
     }
 
-    let cancelled = false
+    const controller = new AbortController()
     setLoading(true)
     setError(null)
     setData(null)
 
-    fetch(`/api/customers/${encodeURIComponent(customerId)}`)
+    fetch(`/api/customers/${encodeURIComponent(customerId)}`, { signal: controller.signal })
       .then(async (res) => {
         if (!res.ok) {
           const body = (await res.json().catch(() => ({}))) as { error?: string }
@@ -104,19 +104,15 @@ export function CustomerDrawer({ customerId, onClose }: CustomerDrawerProps) {
         }
         return res.json() as Promise<CustomerDetail>
       })
-      .then((d) => {
-        if (!cancelled) setData(d)
-      })
+      .then((d) => setData(d))
       .catch((err: unknown) => {
-        if (!cancelled)
-          setError(err instanceof Error ? err.message : "Unknown error")
+        if (err instanceof Error && err.name === "AbortError") return
+        setError(err instanceof Error ? err.message : "Unknown error")
       })
-      .finally(() => {
-        if (!cancelled) setLoading(false)
-      })
+      .finally(() => setLoading(false))
 
     return () => {
-      cancelled = true
+      controller.abort()
     }
   }, [customerId])
 
