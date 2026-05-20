@@ -22,8 +22,12 @@ function getDbReadonly(): NeonQueryFunction<false, false> | null {
 }
 
 export const sql: NeonQueryFunction<false, false> = new Proxy(
-  {} as NeonQueryFunction<false, false>,
+  (() => {}) as unknown as NeonQueryFunction<false, false>,
   {
+    apply(_t, _thisArg, args: unknown[]) {
+      const fn = getDb() as unknown as (...a: unknown[]) => unknown;
+      return fn(...args);
+    },
     get(_, prop) {
       return getDb()[prop as keyof NeonQueryFunction<false, false>];
     },
@@ -35,8 +39,13 @@ export function isReadonlyConfigured(): boolean {
 }
 
 export const sqlReadonly: NeonQueryFunction<false, false> | null = new Proxy(
-  {} as NeonQueryFunction<false, false>,
+  (() => {}) as unknown as NeonQueryFunction<false, false>,
   {
+    apply(_t, _thisArg, args: unknown[]) {
+      const db = getDbReadonly();
+      if (!db) throw new Error("DATABASE_URL_READONLY not configured");
+      return (db as unknown as (...a: unknown[]) => unknown)(...args);
+    },
     get(_, prop) {
       const db = getDbReadonly();
       if (!db) return undefined;
