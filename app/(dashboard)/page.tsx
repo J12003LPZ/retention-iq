@@ -13,11 +13,24 @@ import {
 } from "@/components/ui/card"
 
 export default async function OverviewPage() {
-  const [kpi, trendData, driversData] = await Promise.all([
-    getKpiSummary(),
-    getChurnTrend("weekly"),
-    getChurnDrivers(),
-  ])
+  let kpi: Awaited<ReturnType<typeof getKpiSummary>>
+  let trendData: Awaited<ReturnType<typeof getChurnTrend>>
+  let driversData: Awaited<ReturnType<typeof getChurnDrivers>>
+
+  try {
+    ;[kpi, trendData, driversData] = await Promise.all([
+      getKpiSummary(),
+      getChurnTrend("weekly"),
+      getChurnDrivers(),
+    ])
+  } catch {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 py-24">
+        <p className="text-lg font-semibold text-[--color-on-surface]">Unable to load dashboard</p>
+        <p className="text-sm text-[--color-on-surface-variant]">Check your database connection and try again.</p>
+      </div>
+    )
+  }
 
   const healthScore = kpi.healthScore
 

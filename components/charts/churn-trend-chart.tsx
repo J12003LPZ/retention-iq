@@ -72,15 +72,19 @@ export function ChurnTrendChart({ initialData, initialGranularity = "weekly" }: 
   const [granularity, setGranularity] = React.useState<Granularity>(initialGranularity)
   const [data, setData] = React.useState<ChurnTrendPoint[]>(initialData)
   const [loading, setLoading] = React.useState(false)
+  const [fetchError, setFetchError] = React.useState<string | null>(null)
 
   const fetchData = React.useCallback(async (g: Granularity) => {
     setLoading(true)
+    setFetchError(null)
     try {
-      const res = await fetch(`/api/churn-trends?granularity=${g === "daily" ? "day" : g === "weekly" ? "week" : "month"}`)
-      if (res.ok) {
-        const json = await res.json() as { trend: ChurnTrendPoint[]; drivers: unknown[] }
-        setData(json.trend)
-      }
+      const param = g === "daily" ? "day" : g === "weekly" ? "week" : "month"
+      const res = await fetch(`/api/churn-trends?granularity=${param}`)
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const json = await res.json() as { trend: ChurnTrendPoint[]; drivers: unknown[] }
+      setData(json.trend)
+    } catch (err) {
+      setFetchError(err instanceof Error ? err.message : "Failed to load data")
     } finally {
       setLoading(false)
     }
@@ -112,6 +116,10 @@ export function ChurnTrendChart({ initialData, initialGranularity = "weekly" }: 
           </button>
         ))}
       </div>
+
+      {fetchError && (
+        <p className="text-center text-sm text-red-400">{fetchError}</p>
+      )}
 
       {/* Chart */}
       <div className={`h-64 w-full transition-opacity duration-300 ${loading ? "opacity-50" : "opacity-100"}`}>
