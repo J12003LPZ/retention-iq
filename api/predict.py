@@ -10,6 +10,12 @@ import json, os, joblib
 from pathlib import Path
 
 MODEL_PATH = Path(os.environ.get("CHURN_MODEL_PATH", "public/model/churn_model.joblib"))
+
+_ALLOWED_DIR = Path("public/model").resolve()
+_MODEL_PATH_RESOLVED = MODEL_PATH.resolve()
+if _MODEL_PATH_RESOLVED.parent != _ALLOWED_DIR:
+    raise ValueError(f"Untrusted CHURN_MODEL_PATH: must be inside public/model/")
+
 _BUNDLE = joblib.load(MODEL_PATH) if MODEL_PATH.exists() else None
 
 class handler(BaseHTTPRequestHandler):
@@ -21,8 +27,8 @@ class handler(BaseHTTPRequestHandler):
         feats = _BUNDLE["features"]
         try:
             x = [[float(payload[f]) for f in feats]]
-        except KeyError as e:
-            return self._json(400, {"error": f"missing feature {e.args[0]}"})
+        except (KeyError, ValueError, TypeError) as e:
+            return self._json(400, {"error": f"invalid or missing feature: {e}"})
         prob = float(_BUNDLE["pipeline"].predict_proba(x)[0, 1])
         return self._json(200, {"churnProb": prob})
 

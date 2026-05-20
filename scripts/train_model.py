@@ -85,22 +85,24 @@ def main() -> None:
     pipe = Pipeline([("scale", StandardScaler()), ("lr", LogisticRegression(max_iter=2000))])
     pipe.fit(X, y)
     df["churn_prob"] = pipe.predict_proba(X)[:, 1]
+    X_scaled = pipe.named_steps["scale"].transform(X)
 
     joblib.dump({"pipeline": pipe, "features": feats}, OUT / "churn_model.joblib")
     print("saved model, mean prob positives vs negatives:",
           float(df.loc[df.churned==1, "churn_prob"].mean()),
           float(df.loc[df.churned==0, "churn_prob"].mean()))
 
-    coefs = dict(zip(feats, pipe.named_steps["lr"].coef_.ravel().tolist()))
+    coef_arr = pipe.named_steps["lr"].coef_.ravel()
     rows = []
-    for _, r in df.iterrows():
+    for i, row in df.iterrows():
+        idx = df.index.get_loc(i)
         contribs = sorted(
-            [(f, float(coefs[f]) * float(r[f])) for f in feats],
+            [(feats[j], float(coef_arr[j] * X_scaled[idx, j])) for j in range(len(feats))],
             key=lambda t: abs(t[1]), reverse=True,
         )[:3]
         rows.append((
-            r["customer_id"],
-            float(r["churn_prob"]),
+            row["customer_id"],
+            float(row["churn_prob"]),
             json.dumps([{"feature": f, "weight": round(w, 4)} for f, w in contribs]),
         ))
 
@@ -113,7 +115,7 @@ def main() -> None:
         cur.execute("truncate model_feature_importance;")
         cur.executemany(
             "insert into model_feature_importance(feature, importance) values (%s, %s)",
-            [(f, abs(coefs[f])) for f in feats],
+            [(feats[j], abs(float(coef_arr[j]))) for j in range(len(feats))],
         )
         conn.commit()
         print(f"wrote {len(rows)} predictions and {len(feats)} feature importances")
