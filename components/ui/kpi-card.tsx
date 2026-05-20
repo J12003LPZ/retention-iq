@@ -3,12 +3,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { fmtTrend } from "@/lib/format"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 
 export interface KpiCardProps {
   title: string
@@ -23,38 +17,23 @@ export interface KpiCardProps {
   /**
    * Controls sentiment colouring of the trend badge.
    * - "default"  — positive trend = green, negative = red
-   * - "danger"   — inverted; positive trend = red, negative = green (e.g. churn rate)
+   * - "danger"   — inverted; positive = red, negative = green (e.g. churn rate)
    * - "warning"  — amber accent regardless of direction
    * - "success"  — green accent regardless of direction
    */
   variant?: "default" | "danger" | "warning" | "success"
 }
 
-function trendBadgeClasses(
-  trend: number,
-  variant: KpiCardProps["variant"]
-): string {
-  const base =
-    "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold"
+function trendBadgeClasses(trend: number, variant: KpiCardProps["variant"]): string {
+  const base = "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold tabular-nums"
 
-  if (variant === "warning") {
-    return cn(base, "bg-amber-500/15 text-amber-400")
-  }
-  if (variant === "success") {
-    return cn(base, "bg-emerald-500/15 text-emerald-400")
-  }
+  if (variant === "warning") return cn(base, "bg-amber-500/15 text-amber-300")
+  if (variant === "success") return cn(base, "bg-emerald-500/15 text-emerald-300")
 
   const isPositive = trend >= 0
-
-  // For "danger" variant (e.g. churn rate), positive = bad, negative = good
-  const goodColor = "bg-emerald-500/15 text-emerald-400"
-  const badColor = "bg-red-500/15 text-red-400"
-
-  if (variant === "danger") {
-    return cn(base, isPositive ? badColor : goodColor)
-  }
-
-  // default
+  const goodColor = "bg-emerald-500/15 text-emerald-300"
+  const badColor = "bg-rose-500/15 text-rose-300"
+  if (variant === "danger") return cn(base, isPositive ? badColor : goodColor)
   return cn(base, isPositive ? goodColor : badColor)
 }
 
@@ -67,25 +46,34 @@ export function KpiCard({
   variant = "default",
 }: KpiCardProps) {
   return (
-    <Card className="bg-[--color-surface-container] ring-[--color-outline-variant] text-[--color-on-surface]">
-      <CardHeader className="pb-1">
-        <div className="flex items-start justify-between gap-2">
-          <CardTitle className="text-sm font-medium text-[--color-on-surface-variant] tracking-wide uppercase">
+    <div className="group relative overflow-hidden rounded-xl border border-[--color-outline-variant]/60 bg-gradient-to-b from-[--color-surface-container] to-[--color-surface-container-low] p-6 transition-all hover:border-[--color-primary]/30 hover:from-[--color-surface-container-high]">
+      {/* corner accent */}
+      <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[--color-primary]/[0.04] blur-2xl transition-opacity group-hover:opacity-100 opacity-50" />
+
+      <div className="relative flex flex-col gap-3">
+        {/* Title row */}
+        <div className="flex items-start justify-between gap-3">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[--color-on-surface-variant]">
             {title}
-          </CardTitle>
+          </p>
           {icon != null && (
-            <span className="shrink-0 text-[--color-primary] mt-0.5">{icon}</span>
+            <span className="shrink-0 text-[--color-primary] opacity-80">{icon}</span>
           )}
         </div>
-      </CardHeader>
-      <CardContent>
-        <p className="text-3xl font-bold font-display tracking-tight leading-none">
+
+        {/* Value — Fraunces serif for editorial weight */}
+        <p
+          className="font-display text-[2.75rem] font-medium leading-[0.95] tracking-tight text-[--color-on-surface] tabular-nums"
+          style={{ fontVariationSettings: "'opsz' 144, 'SOFT' 50, 'WONK' 0" }}
+        >
           {value}
         </p>
+
+        {/* Trend row */}
         {trend != null && (
-          <div className="mt-2 flex items-center gap-1.5">
+          <div className="flex items-center gap-2 pt-1">
             <span className={trendBadgeClasses(trend, variant)}>
-              {fmtTrend(trend)}
+              {trend >= 0 ? "↑" : "↓"} {fmtTrend(trend).replace(/^[+-]/, "")}
             </span>
             {trendLabel != null && (
               <span className="text-xs text-[--color-on-surface-variant]">
@@ -94,7 +82,7 @@ export function KpiCard({
             )}
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }
